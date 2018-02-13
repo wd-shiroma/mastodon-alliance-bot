@@ -1,0 +1,19 @@
+{
+    "domain": "example.com",
+    "access_token": "YOUR INSTANCE ACCESS TOKEN",
+    "follow_back": true,
+    "follow_back_status": "フォローしました。。。承認をしてください。。。",
+    "delay": 10000,
+    "alliances": [
+        {
+            "domain": "example2.com",
+            "access_token": "REMOTE INSTANCE ACCESS TOKEN",
+            "hashtag": "hash_tag"
+        },
+        {
+            "domain": "example3.com",
+            "access_token": "REMOTE INSTANCE ACCESS TOKEN",
+            "hashtag": "hash_tag"
+        }
+    ]
+}
