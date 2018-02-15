@@ -8,7 +8,8 @@ var streams = [];
 var tokens = {};
 
 var is_local = function(account) {
-    return account.acct !== account.username;
+    var re = new RegExp('@' + config.domain + '$');
+    return account.username.match(re) ? true : false;
 }
 
 var is_following = async function(account) {
