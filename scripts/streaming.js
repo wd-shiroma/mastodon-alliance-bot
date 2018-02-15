@@ -77,7 +77,7 @@ var start_alliance_streaming = function(alliance) {
     var statuses, account;
 
     stream.on('update', function(payload) {
-        setTimeout(search_and_following, config.delay, payload);
+        setTimeout(search_and_following, config.delay, payload, alliance.follow_back);
     });
 
     stream.on('error', function(error) {
@@ -90,11 +90,11 @@ var start_alliance_streaming = function(alliance) {
     console.log(alliance.domain + ': #' + alliance.hashtag + ' tag streaming start');
 };
 
-var search_and_following = async function(payload) {
+var search_and_following = async function(payload, follow_back = false) {
     var token = tokens[config.access_token];
     if (!(await is_following(payload.account)) && !is_local(payload.account)) {
         var response = await token.get('search', { q: payload.uri, resolve: true });
-        if (!payload.account.locked) {
+        if (!payload.account.locked && follow_back) {
             account = response.statuses[0].account;
             await token.post('accounts/' + account.id + '/follow');
         }

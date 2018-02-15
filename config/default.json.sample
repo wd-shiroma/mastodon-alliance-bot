@@ -8,12 +8,14 @@
         {
             "domain": "example2.com",
             "access_token": "REMOTE INSTANCE ACCESS TOKEN",
-            "hashtag": "hash_tag"
+            "hashtag": "hash_tag",
+            "follow_back": false
         },
         {
             "domain": "example3.com",
             "access_token": "REMOTE INSTANCE ACCESS TOKEN",
-            "hashtag": "hash_tag"
+            "hashtag": "hash_tag",
+            "follow_back": false
         }
     ]
 }
