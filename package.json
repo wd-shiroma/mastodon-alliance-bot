@@ -4,9 +4,10 @@
   "description": "Watching alliance hashtags, and following unfollowed accounts.",
   "scripts": {
     "test": "node scripts/test.js",
-    "start": "forever start scripts/streaming.js",
-    "stop": "forever stopall",
-    "list": "forever list"
+    "start": "[ ! -f process.uid ] && UID=`uuidgen`; forever start --uid $UID scripts/streaming.js; echo $UID > process.uid",
+    "stop": "[ -f process.uid ] && forever stop `cat process.uid`; rm process.uid",
+    "list": "forever list",
+    "stopall": "forever stopall; rm process.uid"
   },
   "author": "guskma",
   "license": "AGPL-3.0",
@@ -14,6 +15,6 @@
     "ansi": "^0.3.1",
     "config": "^1.29.4",
     "forever": "^0.15.3",
-    "mstdn-api": "^0.1.2",
+    "mstdn-api": "^0.1.2"
   }
 }
