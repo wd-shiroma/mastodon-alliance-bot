@@ -1,16 +1,21 @@
-# Mastodon Federation bot
+# Mastodon alliance bot
 
-マストドン用連合bot (Federation bot) です。
+マストドン用の、リモートインスタンスで流れているハッシュタグTLを監視するbotです。
 
-## 機能
+## What purpose
 
-- 自動フォロー返し
-- 未フォローユーザーを自動フォロー（これから実装予定）
+デフォルトハッシュタグをLTLに流すインスタンス( https://theboss.tech など)の完全なLTLを再現するために作りました。
+
+## Features
+
+- 自インスタンスのbotの自動フォロー返し
+- リモートインスタンスのトゥートを監視し、自インスタンスでsearch
+- リモートインスタンスのアカウントを監視し、自インスタンスのbotで自動フォロー
 
 ## Requires
 
-- Node.js(latest)  
-My develop environment is (v9.5.0)
+- Node.js(latest)
+My develop environment is (v8.6.0)
 
 ## How to use
 
@@ -37,6 +42,9 @@ npm start
 
 # stop bot
 npm stop
+
+# stop all forever processes
+npm run stopall
 
 # list bot running
 npm run list
@@ -65,26 +73,29 @@ $ cat config/default.json.sample
         {
             "domain": "example2.com",
             "access_token": "REMOTE INSTANCE ACCESS TOKEN",
-            "hashtag": "hash_tag"
+            "hashtag": "hash_tag",
+            "follow_back": true
         },
         {
             "domain": "example3.com",
             "access_token": "REMOTE INSTANCE ACCESS TOKEN",
-            "hashtag": "hash_tag"
+            "hashtag": "hash_tag",
+            "follow_back": false
         }
     ]
 }
 ```
 
 - `domain`: 自インスタンスのドメイン名です。
-- `access-token`: botとして動作させるアカウントのアクセストークンです。  
+- `access-token`: botとして動作させるアカウントのアクセストークンです。
 ※「ユーザー設定」→「開発」→「アプリ」から各自でアクセストークンを取得してください。
 - `follow_back`: 自インスタンスのbotがフォローされたら自動フォロー返しをします。
 - `follow_back_status`: 相手が鍵アカウントの場合はフォローリクエストを送ったメッセージを投げます。
 - `delay`: リモートインスタンスのトゥート検索とフォローの実行遅延時間を設定します。(ms)
 - `alliances`: ハッシュタグストリームを流すリモートインスタンスの情報です。(複数指定可)
 - `alliances.domain`: リモートインスタンスのドメイン名です。
-- `alliances.access_token`: リモートインスタンスに設置した監視アカウントのアクセストークンです。  
+- `alliances.access_token`: リモートインスタンスに設置した監視アカウントのアクセストークンです。
 ※リモートインスタンスではストリーミングを流すだけです。フォロー等アカウント操作はしません。
 - `alliances.hashtag`: ストリーミングを流すハッシュタグを指定します。
+- `alliances.follow_back`: ストリーミングに流れてきた未フォローアカウントをフォローします。
 
