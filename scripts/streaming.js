@@ -65,7 +65,6 @@ var start_self_streaming = function() {
     stream.on('error', function(error) {
         console.log('error!');
         console.log(error);
-        process.exit(1);
     });
 
     streams.push(stream);
@@ -84,7 +83,6 @@ var start_alliance_streaming = function(alliance) {
     stream.on('error', function(error) {
         console.log('error!');
         console.log(error);
-        process.exit(1);
     });
 
     streams.push(stream);
