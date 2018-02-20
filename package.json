@@ -15,6 +15,7 @@
     "ansi": "^0.3.1",
     "config": "^1.29.4",
     "forever": "^0.15.3",
-    "mstdn-api": "^0.1.2"
+    "mstdn-api": "^0.1.2",
+    "websocket": "^1.0.25"
   }
 }

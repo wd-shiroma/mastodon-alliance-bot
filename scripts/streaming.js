@@ -2,6 +2,7 @@
 
 var Mastodon = require('mstdn-api').default;
 var config = require('config');
+var WebSocketClient = require('websocket').client;
 
 var verify_credentials;
 var streams = [];
@@ -12,8 +13,10 @@ var is_local = function(account) {
     return account.username.match(re) ? true : false;
 }
 
-var is_following = async function(account) {
-    var relationships = await tokens[config.access_token].get('accounts/relationships', {id: [account.id]});
+var is_following = async function(account_url) {
+    var token = tokens[config.access_token];
+    var user_data = await token.get('search', { q: account_url, limit: 1 });
+    var relationships = await token.get('accounts/relationships', {id: [user_data.accounts[0].id]});
     return relationships[0].following;
 };
 
@@ -71,27 +74,36 @@ var start_self_streaming = function() {
     console.log(config.domain + ': notificaton streaming start');
 };
 
-var start_alliance_streaming = function(alliance) {
-    var alliance_token = tokens[alliance.access_token];
-    var stream = alliance_token.stream('hashtag?tag=' + alliance.hashtag, 1000);
-    var statuses, account;
-
-    stream.on('update', function(payload) {
-        setTimeout(search_and_following, config.delay, payload, alliance.follow_back);
+var start_alliance_streaming = function(alliance, delay = 1000) {
+    var url = 'wss://' + alliance.domain + '/api/v1/streaming/?stream=hashtag&tag=' + alliance.hashtag;
+    var client = new WebSocketClient();
+    var client_connect = function() {
+        client.connect(url);
+    };
+    client.on('connect', function(connection) {
+        console.log(alliance.domain + ': #' + alliance.hashtag + ' tag streaming start');
+        connection.on('error', function(e) {
+            console.log('streaming error');
+        });
+        connection.on('close', function() {
+            console.log('connection closed.');
+            setTimeout(client_connect, delay);
+        });
+        connection.on('message', function(message) {
+            if (message.type !== 'utf8') return;
+            var data = JSON.parse(message.utf8Data);
+            if (data.event !== 'update') return;
+            var payload = JSON.parse(data.payload);
+            setTimeout(search_and_following, config.delay, payload, alliance.follow_back);
+        });
     });
-
-    stream.on('error', function(error) {
-        console.log('error!');
-        console.log(error);
-    });
-
-    streams.push(stream);
-    console.log(alliance.domain + ': #' + alliance.hashtag + ' tag streaming start');
+    client_connect();
+    return client;
 };
 
 var search_and_following = async function(payload, follow_back = false) {
     var token = tokens[config.access_token];
-    if (!(await is_following(payload.account)) && !is_local(payload.account)) {
+    if (!is_local(payload.account) && !(await is_following(payload.account.url))) {
         var response = await token.get('search', { q: payload.uri, resolve: true });
         if (!payload.account.locked && follow_back) {
             account = response.statuses[0].account;
@@ -106,7 +118,7 @@ var main = async function() {
 
     if (Array.isArray(config.alliances)) {
         config.alliances.forEach(function(a) {
-            start_alliance_streaming(a);
+            streams.push(start_alliance_streaming(a));
         });
     }
 };
