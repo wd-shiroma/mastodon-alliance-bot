@@ -72,13 +72,11 @@ $ cat config/default.json.sample
     "alliances": [
         {
             "domain": "example2.com",
-            "access_token": "REMOTE INSTANCE ACCESS TOKEN",
             "hashtag": "hash_tag",
             "follow_back": true
         },
         {
             "domain": "example3.com",
-            "access_token": "REMOTE INSTANCE ACCESS TOKEN",
             "hashtag": "hash_tag",
             "follow_back": false
         }
@@ -94,8 +92,6 @@ $ cat config/default.json.sample
 - `delay`: リモートインスタンスのトゥート検索とフォローの実行遅延時間を設定します。(ms)
 - `alliances`: ハッシュタグストリームを流すリモートインスタンスの情報です。(複数指定可)
 - `alliances.domain`: リモートインスタンスのドメイン名です。
-- `alliances.access_token`: リモートインスタンスに設置した監視アカウントのアクセストークンです。
-※リモートインスタンスではストリーミングを流すだけです。フォロー等アカウント操作はしません。
 - `alliances.hashtag`: ストリーミングを流すハッシュタグを指定します。
 - `alliances.follow_back`: ストリーミングに流れてきた未フォローアカウントをフォローします。
 
