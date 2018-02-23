@@ -1,5 +1,6 @@
 var Mastodon = require('mstdn-api').default;
 var msg = require('../lib/decorator');
+var WebSocketClient = require('websocket').client;
 
 var error_process = function(e, text = '') {
     msg.error('NG');
@@ -37,17 +38,40 @@ var check_authorization = function(conf) {
     });
 };
 
+var check_streaming_authorization = function(conf) {
+    return new Promise(function(resolve, reject) {
+        var client = new WebSocketClient();
+        client.on('connect', (connection) => {
+            connection.close();
+            msg.info('OK');
+            resolve(true);
+        });
+        client.on('connectFailed', function(error) {
+            msg.error('NG').plane('code: ' + error.code + ', host: ' + error.host + ':' + error.port);
+            reject(false);
+        });
+        client.on('httpResponse', (response, wsc) => {
+            msg.error('NG');
+            console.log(response.statusCode, response.statusMessage, response.req.path, response.req._header);
+            reject(false);
+        });
+        client.connect('wss://' + conf.domain + '/api/v1/streaming/?stream=hashtag&tag=' + conf.hashtag);
+    });
+};
+
 var check_alliances_authorization = function(alliances) {
     return new Promise(async function(resolve, reject) {
         var authorized = true;
+        var check_streaming;
 
         if (Array.isArray(alliances)) {
             for (key in alliances) {
                 var a = alliances[key];
-                msg.plane('Authorizing alliance account (' + a.domain + ') ... ', false);
+                msg.plane('Connecting alliance timeline (' + a.domain + '#' + a.hashtag + ') ... ', false);
 
                 try {
-                    var payload = await check_authorization(a);
+                    check_streming = await check_streaming_authorization(a);
+                    authorized = check_streaming ? authorized : false;
                 } catch(e) {
                     authorized = false;
                 }
