@@ -70,7 +70,7 @@ var check_alliances_authorization = function(alliances) {
                 msg.plane('Connecting alliance timeline (' + a.domain + '#' + a.hashtag + ') ... ', false);
 
                 try {
-                    check_streming = await check_streaming_authorization(a);
+                    check_streaming = await check_streaming_authorization(a);
                     authorized = check_streaming ? authorized : false;
                 } catch(e) {
                     authorized = false;
