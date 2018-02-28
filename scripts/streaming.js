@@ -16,8 +16,12 @@ var is_local = function(account) {
 var is_following = async function(account_url) {
     var token = tokens[config.access_token];
     var user_data = await token.get('search', { q: account_url, limit: 1 });
-    var relationships = await token.get('accounts/relationships', {id: [user_data.accounts[0].id]});
-    return relationships[0].following;
+    if (user_data && user_data.accounts.length > 0) {
+        var relationships = await token.get('accounts/relationships', {id: [user_data.accounts[0].id]});
+        return relationships[0].following;
+    else {
+        return false;
+    }
 };
 
 var prepare_tokens = async function() {
