@@ -80,7 +80,7 @@ var start_self_streaming = function() {
 };
 
 var start_alliance_streaming = function(alliance, delay = 1000) {
-    var url = 'wss://' + alliance.domain + '/api/v1/streaming/?stream=hashtag&tag=' + alliance.hashtag;
+    var url = 'wss://' + alliance.domain + '/api/v1/streaming/?stream=hashtag&tag=' + encodeURIComponent(alliance.hashtag);
     var client = new WebSocketClient();
     var client_connect = function() {
         console.log('Connecting to: ' + url);
