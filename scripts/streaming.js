@@ -71,7 +71,8 @@ var start_self_streaming = function() {
 
     stream.on('error', function(error) {
         console.log('error!');
-        console.log(error);
+        console.log('status', error.status);
+        console.log(error.response.error || error);
     });
 
     streams.push(stream);
@@ -82,6 +83,7 @@ var start_alliance_streaming = function(alliance, delay = 1000) {
     var url = 'wss://' + alliance.domain + '/api/v1/streaming/?stream=hashtag&tag=' + alliance.hashtag;
     var client = new WebSocketClient();
     var client_connect = function() {
+        console.log('Connecting to: ' + url);
         client.connect(url);
     };
     client.on('connect', function(connection) {
