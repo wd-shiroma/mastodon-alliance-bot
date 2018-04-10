@@ -19,7 +19,7 @@ var is_following = async function(account_url) {
     if (user_data && user_data.accounts.length > 0) {
         var relationships = await token.get('accounts/relationships', {id: [user_data.accounts[0].id]});
         return relationships[0].following;
-    else {
+    } else {
         return false;
     }
 };
