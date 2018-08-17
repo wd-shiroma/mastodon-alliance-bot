@@ -7,7 +7,8 @@
     "start": "[ ! -f process.uid ] && UID=`uuidgen`; forever start --uid $UID scripts/streaming.js; echo $UID > process.uid",
     "stop": "[ -f process.uid ] && forever stop `cat process.uid`; rm process.uid",
     "list": "forever list",
-    "stopall": "forever stopall; rm process.uid"
+    "stopall": "forever stopall; rm process.uid",
+    "watch": "/bin/bash scripts/watch.sh"
   },
   "author": "guskma",
   "license": "AGPL-3.0",

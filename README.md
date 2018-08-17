@@ -61,8 +61,9 @@ cp config/default.json.sample config/default.json
 vim config/default.json
 ```
 
-```
-$ cat config/default.json.sample
+### default.json.sample
+
+```javascript
 {
     "domain": "example.com",
     "access_token": "YOUR INSTANCE ACCESS TOKEN",
@@ -94,4 +95,12 @@ $ cat config/default.json.sample
 - `alliances.domain`: リモートインスタンスのドメイン名です。
 - `alliances.hashtag`: ストリーミングを流すハッシュタグを指定します。
 - `alliances.follow_back`: ストリーミングに流れてきた未フォローアカウントをフォローします。
+
+## watch process
+
+サービスが停止していないかの監視スクリプト(簡易)を用意しました。
+
+```./scripts/watch.sh```
+
+cronなどで回して監視してください。
 
