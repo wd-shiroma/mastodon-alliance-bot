@@ -1,10 +1,6 @@
 # Mastodon alliance bot
 
-マストドン用の、リモートインスタンスで流れているハッシュタグTLを監視するbotです。
-
-## What purpose
-
-デフォルトハッシュタグをLTLに流すインスタンス( https://theboss.tech など)の完全なLTLを再現するために作りました。
+リモートインスタンスで流れているハッシュタグTLを監視するマストドン用のbotです。
 
 ## Features
 
@@ -48,6 +44,9 @@ npm run stopall
 
 # list bot running
 npm run list
+
+# watch bot process is running
+npm run watch
 ```
 
 ## Configuration
@@ -102,5 +101,8 @@ vim config/default.json
 
 ```./scripts/watch.sh```
 
-cronなどで回して監視してください。
+npmタスクからも実行することが出来ます。
 
+```npm run watch```
+
+cronなどで回して監視してください。
